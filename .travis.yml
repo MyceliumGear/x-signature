@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 2.2.2
+gemfile:
+  - gemfiles/rails_4.2.3.gemfile
+services:
+  - redis-server
+before_install: gem install bundler -v 1.10.6
+install: bin/setup
+script: rake
