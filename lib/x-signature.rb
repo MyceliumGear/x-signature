@@ -19,4 +19,23 @@ module XSignature
   autoload :Base64SignatureValidator, File.expand_path('../x-signature/base64_signature_validator', __FILE__)
   autoload :HexSignatureValidator, File.expand_path('../x-signature/hex_signature_validator', __FILE__)
 
+  class << self
+    attr_writer :signature_header, :client_header, :nonce_header
+
+    def signature_header
+      @signature_header ||= 'HTTP_X_SIGNATURE'
+    end
+
+    def client_header
+      @client_header ||= 'HTTP_X_CLIENT'
+    end
+
+    def nonce_header
+      @nonce_header ||= 'HTTP_X_NONCE'
+    end
+
+    def configure
+      yield self
+    end
+  end
 end

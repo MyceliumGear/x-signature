@@ -22,7 +22,22 @@ Or install it yourself as:
 
 ## Usage
 
-### Rails
+For details check out [API reference](http://www.rubydoc.info/gems/x-signature).
+
+### Signing request
+
+```ruby
+nonce = (Time.now.to_f * 1e3).to_i
+headers['X-Nonce'] = nonce
+headers['X-Signature'] = XSignature::HexSignatureValidator.signature(
+  secret: '42', nonce: nonce, body: 'test', method: 'GET', request_uri: '/path'
+)
+headers['X-Client'] = user.id
+```
+
+### Verifying signature
+
+#### Rails
 
 In the controller:
 

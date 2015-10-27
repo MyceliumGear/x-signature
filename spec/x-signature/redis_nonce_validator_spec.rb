@@ -23,10 +23,12 @@ describe XSignature::RedisNonceValidator do
     @validator.redis_connection.del keys unless keys.empty?
     expect(@validator.valid?(@data)).to eq true
     expect(@validator.valid?(@data)).to eq false
+    expect(@validator.redis_connection.get('XSignature:LastNonce:0')).to eq '10'
     @data.nonce = 9
     expect(@validator.valid?(@data)).to eq false
     @data.nonce = 11
     expect(@validator.valid?(@data)).to eq true
     expect(@validator.valid?(@data)).to eq false
+    expect(@validator.redis_connection.get('XSignature:LastNonce:0')).to eq '11'
   end
 end
