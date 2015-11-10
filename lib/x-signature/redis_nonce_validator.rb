@@ -6,7 +6,7 @@ module XSignature
     attr_accessor :redis_connection, :keys_prefix
 
     def initialize(redis_connection: nil, keys_prefix: 'XSignature:LastNonce:')
-      @redis_connection = redis_connection || Redis.current
+      @redis_connection = redis_connection || Redis.current rescue StandardError.new('Bad redis connection')
       @keys_prefix      = keys_prefix
     end
 
