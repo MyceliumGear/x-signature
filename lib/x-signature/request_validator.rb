@@ -3,9 +3,10 @@ module XSignature
 
     attr_accessor :signature_validator, :nonce_validator
 
-    def initialize(signature_validator: nil, nonce_validator: nil)
+    def initialize(signature_validator: nil, nonce_validator: nil, check_nonce: true)
       @signature_validator = signature_validator || SignatureMultiValidator.new(HexSignatureValidator.new, Base64SignatureValidator.new)
       @nonce_validator     = nonce_validator || RedisNonceValidator.new
+      @check_nonce         = check_nonce
     end
 
     # :secret, :signature, :client, :nonce, :method, :request_uri, :body
@@ -14,7 +15,7 @@ module XSignature
       args.each do |k, v|
         data[k] = v
       end
-      fail InvalidNonce unless @nonce_validator.valid?(data)
+      fail InvalidNonce if @check_nonce && !@nonce_validator.valid?(data)
       fail InvalidSignature unless @signature_validator.valid?(data)
       true
     end
